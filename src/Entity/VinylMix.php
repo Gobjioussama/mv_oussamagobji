@@ -2,26 +2,28 @@
 
 namespace App\Entity;
 
+use App\Repository\VinylMixRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\VinylMixRepository;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-
+use App\Entity\Gedmo\Timestampable;
+use Gedmo\Mapping\Annotation\Slug;
 
 #[ORM\Entity(repositoryClass: VinylMixRepository::class)]
 class VinylMix
 {
-    
+    #[Gedmo\Timestampable()]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    private ?string $discription = null;
 
     #[ORM\Column]
     private ?int $trackCount = null;
@@ -30,12 +32,17 @@ class VinylMix
     private ?string $genre = null;
 
     #[ORM\Column]
-    private \DateTimeImmutable $createdAt ;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
+    //private ?int $votes = null;
     private int $votes = 0;
-    public function __construct()
-    {
+
+    #[ORM\Column(length: 100, unique: true)]
+    #[Slug(fields: ['title'])]
+    private ?string $slug = null;
+
+    public function __construct(){
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -56,14 +63,14 @@ class VinylMix
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDiscription(): ?string
     {
-        return $this->description;
+        return $this->discription;
     }
 
-    public function setDescription(?string $description): static
+    public function setDiscription(?string $discription): static
     {
-        $this->description = $description;
+        $this->discription = $discription;
 
         return $this;
     }
@@ -115,25 +122,41 @@ class VinylMix
 
         return $this;
     }
+
     public function getVotesString(): string
     {
         $prefix = ($this->votes === 0) ? '' : (($this->votes >= 0) ? '+' : '-');
+    
         return sprintf('%s %d', $prefix, abs($this->votes));
-}
-public function getImageUrl(int $width): string
-{
-    return sprintf(
-        'https://picsum.photos/id/%d/%d',
-        ($this->getId() + 50) % 1000, // number between 0 and 1000, based on the id
-        $width
-    );
-}
-public function upVote(): void
+    }
+
+    public function getImageUrl(int $width): string
+    {
+        return sprintf(
+            'https://picsum.photos/id/%d/%d',
+            ($this->getId() + 50) % 1000, // number between 0 and 1000, based on the id
+            $width
+        );
+    }
+
+    public function upVote(): void
     {
         $this->votes++;
     }
     public function downVote(): void
     {
         $this->votes--;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }
