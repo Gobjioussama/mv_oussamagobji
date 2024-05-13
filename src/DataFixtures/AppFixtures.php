@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\VinylMix;
+use App\Factory\VinylMixFactory;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -20,7 +21,8 @@ class AppFixtures extends Fixture
         $mix->setTrackCount(rand(5, 20));
         $mix->setVotes(rand(-50, 50));
 
-        $manager->persist($mix);
+        
+        VinylMixFactory::createMany(25);
         $manager->flush();
         
     }

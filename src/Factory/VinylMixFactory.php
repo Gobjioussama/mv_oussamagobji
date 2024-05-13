@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\VinylMix;
 use App\Repository\VinylMixRepository;
+use Symfony\Component\Config\Loader\ParamConfigurator;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -47,12 +48,12 @@ final class VinylMixFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'genre' => self::faker()->text(255),
-            'slug' => self::faker()->text(100),
-            'title' => self::faker()->text(255),
-            'trackCount' => self::faker()->randomNumber(),
-            'votes' => self::faker()->randomNumber(),
+            'title' => self::faker()->words(5, true),
+            'description' => self::faker(),Paragraph(),
+            'trackCount' => self::faker()->numberBetween(5, 20),
+            'genre' => self::faker()->randomElement(['pop', 'rock']),
+            'trackCount' => self::faker()->numberBetween(5, 20),
+            'genre' => self::faker()->randomElement(['pop', 'rock']),
         ];
     }
 
