@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\VinylMixRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VinylMixRepository;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+
 
 #[ORM\Entity(repositoryClass: VinylMixRepository::class)]
 class VinylMix
 {
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -125,4 +128,12 @@ public function getImageUrl(int $width): string
         $width
     );
 }
+public function upVote(): void
+    {
+        $this->votes++;
+    }
+    public function downVote(): void
+    {
+        $this->votes--;
+    }
 }
