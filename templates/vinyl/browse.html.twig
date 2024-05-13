@@ -31,11 +31,17 @@
                     <span>{{ mix.trackCount }} Tracks</span> | <span>{{ mix.genre }}</span>| 
                     
                 <span>    {{ mix.votesString }} votes</span>
-                   {{ pagerfanta(pager) }}
+                <? //  {{ pagerfanta(pager) }}
+                 {% if pager.hasNextPage %}
+     <turbo-frame id="mix-browse-list-{{ pager.nextPage }}" src="{{ pagerfanta_page_url(pager, pager.nextPage) }}" loading="lazy"></turbo-frame>
+     {% endif %}
                 </div>
+                </turbo-frame>
             </div>
           {% endfor %}
+          
         </div>
+        
     </div>
 </div>
 </a>
